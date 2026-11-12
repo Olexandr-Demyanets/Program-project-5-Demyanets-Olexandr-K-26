@@ -1,0 +1,22 @@
+Program project 5, variant 5
+Computations: A1, A2, B1, B2, C, D, F   (slow, 7 s: A1, B2; quick, 1 s: others)
+Dependencies: A2(A1), B2(B1), F(C), D(A2, B2)
+
+Schedule:
+  main: A1 -> A2 -> wait B2 -> D -> wait T1
+  T1:   B1 -> B2 -> signal B2 -> wait C -> F
+  T2:   C
+Expected: ~9 s; 2 threads launched besides main;
+          3 threads work at once only during 0..1 s, then at most 2.
+
+  time  thread  computation
+   1.0  T1      B1
+   1.0  T2      C
+   7.0  main    A1
+   8.0  main    A2
+   8.0  T1      B2
+   9.0  T1      F
+   9.0  main    D
+
+Execution time: 9.02 s
+Work is done!
